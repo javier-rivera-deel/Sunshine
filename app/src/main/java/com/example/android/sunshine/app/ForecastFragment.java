@@ -46,6 +46,8 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
         if(id == R.id.action_refresh){
+            FetchWeatherTask weatherTask = new FetchWeatherTask();
+            weatherTask.execute();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -56,8 +58,6 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-
-
         ArrayAdapter<String> mForecastAdapter;
         String[] forecastArray = {
                 "Today - Sunny - 88/50",
@@ -67,8 +67,6 @@ public class ForecastFragment extends Fragment {
                 "Fri - Cloudy - 88/50",
                 "Sat - Rain - 88/50",
         };
-
-
 
         List<String> weekForecast = new ArrayList<String>(
                 Arrays.asList(forecastArray));
@@ -86,12 +84,12 @@ public class ForecastFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
 
-
-
         return rootView;
     }
 
     public class FetchWeatherTask extends AsyncTask<Void, Void, Void> {
+
+        public String postcode;
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
@@ -99,7 +97,7 @@ public class ForecastFragment extends Fragment {
         protected Void doInBackground(Void... params) {
             //network call snippet
             // These two need to be declared outside the try/catch
-// so that they can be closed in the finally block.
+            // so that they can be closed in the finally block.
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 
@@ -112,7 +110,7 @@ public class ForecastFragment extends Fragment {
                 // http://openweathermap.org/API#forecast
                 //URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
                 String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
-                String apiKey = "APPID=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
+                String apiKey = "&APPID=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
                 URL url = new URL(baseUrl.concat(apiKey));
                 System.out.print(url);
 
@@ -143,6 +141,7 @@ public class ForecastFragment extends Fragment {
                     return null;
                 }
                 forecastJsonStr = buffer.toString();
+                Log.d("Weather: ",forecastJsonStr);
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attempting
