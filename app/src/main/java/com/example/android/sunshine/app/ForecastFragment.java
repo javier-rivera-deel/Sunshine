@@ -34,7 +34,7 @@ import java.util.List;
  * Created by javi on 3/9/16.
  */
 public class ForecastFragment extends Fragment {
-
+    ArrayAdapter<String> mForecastAdapter;
     public ForecastFragment() {
     }
 
@@ -60,12 +60,16 @@ public class ForecastFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ArrayAdapter<String> mForecastAdapter;
+
+
+
+
         String[] forecastArray = {
                 "Today - Sunny - 88/50",
                 "Tus - Sunny - 88/50",
@@ -191,9 +195,7 @@ public class ForecastFragment extends Fragment {
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 
-            for (String s : resultStrs) {
-                Log.v(LOG_TAG, "Forecast entry: " + s);
-            }
+
             return resultStrs;
 
         }
@@ -239,7 +241,7 @@ public class ForecastFragment extends Fragment {
                         .build();
 
                 URL url = new URL(builtUri.toString());
-                Log.v(LOG_TAG, "Built URI = " + url);
+                //Log.v(LOG_TAG, "Built URI = " + url);
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -268,8 +270,8 @@ public class ForecastFragment extends Fragment {
                     return null;
                 }
                 forecastJsonStr = buffer.toString();
-               Log.d("Weather: ",forecastJsonStr);
-                Log.v(LOG_TAG, "Forecast string: " + forecastJsonStr);
+
+
 
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
@@ -297,6 +299,15 @@ public class ForecastFragment extends Fragment {
 
             // This will only happen if there was an error getting or parsing the forecast.
             return null;
+        }
+        @Override
+        protected void onPostExecute(String[] results){
+            if(results != null){
+                mForecastAdapter.clear();
+                for(String dayForecastStr : results){
+                    mForecastAdapter.add(dayForecastStr);
+                }
+            }
         }
     }
 }
