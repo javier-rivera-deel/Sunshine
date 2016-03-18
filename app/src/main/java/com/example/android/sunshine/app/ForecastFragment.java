@@ -102,7 +102,7 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Context context = getActivity();
-                CharSequence forecast = mForecastAdapter.getItem(i).toString();
+                String forecast = mForecastAdapter.getItem(i).toString();
                 CharSequence text = "Hello toast!";
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, forecast, duration);
