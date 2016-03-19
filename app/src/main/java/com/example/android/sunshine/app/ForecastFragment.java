@@ -1,6 +1,7 @@
 package com.example.android.sunshine.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import java.util.List;
  * Created by javi on 3/9/16.
  */
 public class ForecastFragment extends Fragment {
+
     ArrayAdapter<String> mForecastAdapter;
     public ForecastFragment() {
     }
@@ -101,12 +103,23 @@ public class ForecastFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                // Executed in an Activity, so 'this' is the Context
+                // The fileUrl is a string URL, such as "http://www.example.com/image.png"
+
+                String forecast = mForecastAdapter.getItem(i).toString();
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra(Intent.EXTRA_TEXT, forecast);
+                startActivity(intent);
+
+                /*
                 Context context = getActivity();
                 String forecast = mForecastAdapter.getItem(i).toString();
                 CharSequence text = "Hello toast!";
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, forecast, duration);
                 toast.show();
+                */
             }
         });
 
