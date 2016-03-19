@@ -71,10 +71,6 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-
-
-
-
         String[] forecastArray = {
                 "Today - Sunny - 88/50",
                 "Tus - Sunny - 88/50",
