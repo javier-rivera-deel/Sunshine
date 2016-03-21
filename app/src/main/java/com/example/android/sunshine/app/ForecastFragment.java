@@ -56,14 +56,33 @@ public class ForecastFragment extends Fragment {
         inflater.inflate(R.menu.forecast_fragment, menu);
     }
 
+    private void updateWeather(){
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        weatherTask.execute(location);
+    }
+    @Override
+    public void onStart(){
+        super.onStart();
+        updateWeather();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
         if(id == R.id.action_refresh){
+            /*
+            OLD CODE THAT ALLOWED TO UPDATE THE CONTENT MANUALLY
+
             FetchWeatherTask weatherTask = new FetchWeatherTask();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String location = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
             weatherTask.execute(location);
+            */
+
+            //new code that updates automatically data from server
+            updateWeather();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -95,7 +114,8 @@ public class ForecastFragment extends Fragment {
                 //id for textview to populate
                 R.id.list_item_forecast_textview,
                 //forecast data
-                weekForecast);
+                //weekForecast this used to be the dummy data coming from forecastArray 
+                new ArrayList<String>());
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
